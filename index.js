@@ -5,8 +5,8 @@
 ////////////////// Table Constructor //////////////////
 function Table() {
   this.deck = new Deck();
-  this.player = new Player();
-  this.dealer = new Player();
+  this.player = new Player('player');
+  this.dealer = new Player('dealer');
   this.deck.initialize();
   this.deck.shuffle();
 
@@ -64,7 +64,8 @@ function Deck(count=4) {
 }
 
 ////////////////// Player Constructor //////////////////
-function Player() {
+function Player(name) {
+  this.name = name;
   this.hand = [];
   this.value = 0;
 
@@ -89,6 +90,88 @@ function Player() {
 //////////////////////// VIEW /////////////////////////
 ///////////////////////////////////////////////////////
 
+//////////////////// Render Cards /////////////////////
+function renderCard(card) {
+  var currentImg = "images/" + card.value + card.suite + ".jpg"
+  var current = document.createElement('img');
+  current.setAttribute('src', currentImg);
+  current.classList.add('card');
+  return current;
+}
+
+//////////////////// Render Cards //////////////////////
+function renderCards(hand) {
+  result = [];
+  hand.forEach(card => {
+    result.push(renderCard(card));
+  });
+  return result;
+}
+
+//////////////////// Render Cards //////////////////////
+function renderHand(player) {
+  var hand = document.createElement('div');
+  hand.classList.add('hand');
+  renderCards(player.hand).forEach(card => {
+    hand.append(card);
+  });
+  return hand;
+}
+
+function renderValue(player) {
+  var value = document.createElement('div');
+  value.classList.add(player.name + 'value', 'value');
+  value.innerHTML = 'Value: ' + player.value;
+  return value;
+}
+//////////////////// Render Hand //////////////////////
+function renderPlayer(player) {
+  var currentPlayer = document.querySelector('#' + player.name);
+  currentPlayer.innerHTML = "";
+  var name = document.createElement('div');
+  name.classList.add('playername');
+  name.innerHTML = player.name;
+  currentPlayer.append(renderHand(player));
+  currentPlayer.append(name);
+  currentPlayer.append(renderValue(player));
+}
+
+/////////////////// Render Buttons /////////////////////
+function renderButtons() {
+  var buttons = document.createElement('div');
+  buttons.classList.add('buttons');
+  buttons.append(renderDouble());
+  buttons.append(renderHit());
+  buttons.append(renderStay());
+  document.querySelector('#player').append(buttons);
+}
+
+///////////////////// Render HIT ///////////////////////
+function renderHit() {
+  var hitButton = document.createElement('button');
+  hitButton.classList.add('hit');
+  hitButton.innerHTML = "HIT";
+  hitButton.addEventListener('click', () => {console.log('hello')});
+  return hitButton;
+}
+
+///////////////////// Render HIT ///////////////////////
+function renderStay() {
+  var stayButton = document.createElement('button');
+  stayButton.classList.add('stay');
+  stayButton.innerHTML = 'STAY';
+  stayButton.addEventListener('click', () => {console.log('hello')});
+  return stayButton;
+}
+
+///////////////////// Render HIT ///////////////////////
+function renderDouble() {
+  var doubleButton = document.createElement('button');
+  doubleButton.classList.add('double');
+  doubleButton.innerHTML = 'DOUBLE';
+  doubleButton.addEventListener('click', () => {console.log('hello')});
+  return doubleButton;
+}
 
 ///////////////////////////////////////////////////////
 ////////////////////// Controller /////////////////////
