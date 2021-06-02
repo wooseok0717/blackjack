@@ -68,6 +68,7 @@ function Player(name) {
   this.name = name;
   this.hand = [];
   this.value = 0;
+  this.aceCount = 0;
 
   this.emptyHands = () => {
     this.hand = [];
@@ -75,6 +76,9 @@ function Player(name) {
   }
   this.hit = (deck) => {
     var newCard = deck.draw();
+    if (newCard.value === 'Ace') {
+      this.aceCount++;
+    }
     this.hand.push(newCard);
     if (typeof(newCard.value) === 'number') {
       this.value += newCard.value;
@@ -221,14 +225,22 @@ function startGame() {
   renderButtons();
 }
 
-//////////////////// Activate Hit //////////////////////
+///////////////// Activate Hit Player //////////////////
 function handleHit() {
   activeTable.playerHit();
-  renderPlayer(activeTable.player);
   if (!checkBust(activeTable.player.value)) {
+    renderPlayer(activeTable.player);
     renderButtons();
   } else {
-    handleBust();
+    if (activeTable.player.aceCount) {
+      activeTable.player.value -= 10;
+      activeTable.player.aceCount--;
+      renderPlayer(activeTable.player);
+      renderButtons();
+    } else {
+      renderPlayer(activeTable.player);
+      handleBust();
+    }
   }
 }
 
