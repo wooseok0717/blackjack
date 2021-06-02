@@ -143,7 +143,7 @@ function renderPlayer(player) {
 /////////////////// Render Buttons /////////////////////
 function renderButtons() {
   var buttons = document.createElement('div');
-  buttons.classList.add('buttons');
+  buttons.setAttribute('id', 'buttons');
   buttons.append(renderDouble());
   buttons.append(renderHit());
   buttons.append(renderStay());
@@ -164,7 +164,7 @@ function renderStay() {
   var stayButton = document.createElement('button');
   stayButton.classList.add('stay');
   stayButton.innerHTML = 'STAY';
-  stayButton.addEventListener('click', () => {console.log('hello')});
+  stayButton.addEventListener('click', handleStay);
   return stayButton;
 }
 
@@ -201,6 +201,34 @@ function renderBust() {
   var busted = document.createElement('div');
   busted.innerHTML = 'BUSTED'
   return busted;
+}
+
+///////////////////// Render Bust ///////////////////////
+function renderDealerBust() {
+  var dealerBust = document.createElement('div');
+  dealerBust.innerHTML = 'Dealer Busted!! You won!!';
+  return dealerBust;
+}
+
+///////////////////// Render Draw ///////////////////////
+function renderDraw() {
+  var draw = document.createElement('div');
+  draw.innerHTML = 'Draw!!';
+  return draw;
+}
+
+///////////////////// Render Draw ///////////////////////
+function renderLost() {
+  var lost = document.createElement('div');
+  lost.innerHTML = 'You Lost!';
+  return lost;
+}
+
+///////////////////// Render Draw ///////////////////////
+function renderWon() {
+  var lost = document.createElement('div');
+  lost.innerHTML = 'You Won!!';
+  return lost;
 }
 
 ///////////////////////////////////////////////////////
@@ -244,12 +272,76 @@ function handleHit() {
   }
 }
 
+//////////////////// Handle Stay //////////////////////
+function handleStay() {
+  document.querySelector('#buttons').innerHTML = '';
+  playDealer();
+}
+
 //////////////////// Handle Bust //////////////////////
 function handleBust() {
   var center = document.querySelector('#center');
   center.innerHTML = '';
   center.append(renderBust());
   center.append(renderRematch());
+}
+
+//////////////////// Play Dealer //////////////////////
+function playDealer() {
+  while (activeTable.dealer.value <= 16) {
+    activeTable.dealerHit();
+    if (activeTable.dealer.value > 21 && activeTable.dealer.aceCount) {
+      activeTable.dealer.value -= 10;
+      activeTable.dealer.aceCount--;
+    }
+  }
+  renderPlayer(activeTable.dealer);
+  checkStatus();
+}
+
+//////////////// Handle Dealer Bust //////////////////
+function handleDealerBust() {
+  var center = document.querySelector('#center');
+  center.innerHTML = '';
+  center.append(renderDealerBust());
+  center.append(renderRematch());
+}
+
+//////////////// Handle Dealer Bust //////////////////
+function handleDraw() {
+  var center = document.querySelector('#center');
+  center.innerHTML = '';
+  center.append(renderDraw());
+  center.append(renderRematch());
+}
+
+//////////////////// Handle Lost //////////////////////
+function handleLost() {
+  var center = document.querySelector('#center');
+  center.innerHTML = '';
+  center.append(renderLost());
+  center.append(renderRematch());
+}
+
+//////////////////// Handle Lost //////////////////////
+function handleWon() {
+  var center = document.querySelector('#center');
+  center.innerHTML = '';
+  center.append(renderWon());
+  center.append(renderRematch());
+}
+
+/////////////////// Check Status ////////////////////
+function checkStatus() {
+  if (activeTable.dealer.value > 21) {
+    handleDealerBust();
+  } else if (activeTable.dealer.value === activeTable.player.value) {
+    handleDraw();
+  } else if (activeTable.dealer.value > activeTable.player.value) {
+    handleLost();
+  } else {
+    handleWon();
+  }
 }
 
 ////////////////// Check For Bust ///////////////////
