@@ -1,0 +1,41 @@
+.table {
+  background: url('../images/blackjack_background.jpeg') no-repeat center;
+  background-size: cover;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card {
+  height: 260px;
+  border-radius: 21px;
+  margin: 3px;
+}
+
+.value {
+  color: yellow;
+  font-size: 30px;
+}
+
+.playername {
+  color: yellow;
+  font-size: 40px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  font-size: 30px;
+  border-radius: 12px;
+  padding: 15px;
+  background-color: lightpink;
+}
+
+#player {
+  flex-direction: row-reverse;
+}
+
