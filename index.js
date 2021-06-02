@@ -151,11 +151,11 @@ function renderHit() {
   var hitButton = document.createElement('button');
   hitButton.classList.add('hit');
   hitButton.innerHTML = "HIT";
-  hitButton.addEventListener('click', () => {console.log('hello')});
+  hitButton.addEventListener('click', handleHit);
   return hitButton;
 }
 
-///////////////////// Render HIT ///////////////////////
+///////////////////// Render Stay ///////////////////////
 function renderStay() {
   var stayButton = document.createElement('button');
   stayButton.classList.add('stay');
@@ -164,7 +164,7 @@ function renderStay() {
   return stayButton;
 }
 
-///////////////////// Render HIT ///////////////////////
+///////////////////// Render Double ///////////////////////
 function renderDouble() {
   var doubleButton = document.createElement('button');
   doubleButton.classList.add('double');
@@ -173,6 +173,78 @@ function renderDouble() {
   return doubleButton;
 }
 
+//////////////////// Render START //////////////////////
+
+function renderStart() {
+  var startButton = document.createElement('button');
+  startButton.innerHTML = 'START';
+  startButton.classList.add('startbutton');
+  startButton.addEventListener('click', brandNewGame);
+  document.querySelector('#center').append(startButton);
+}
+
+//////////////////// Render Rematch //////////////////////
+function renderRematch() {
+  var rematchButton = document.createElement('button');
+  rematchButton.innerHTML = 'Rematch?'
+  rematchButton.addEventListener('click', startGame);
+  return rematchButton;
+}
+
+
+///////////////////// Render Bust ///////////////////////
+function renderBust() {
+  var busted = document.createElement('div');
+  busted.innerHTML = 'BUSTED'
+  return busted;
+}
+
 ///////////////////////////////////////////////////////
 ////////////////////// Controller /////////////////////
 ///////////////////////////////////////////////////////
+
+/////////////////// Start New Game /////////////////////
+
+renderStart();
+var activeTable;
+function brandNewGame() {
+  activeTable = new Table();
+  startGame();
+}
+
+///////////////////// Start Game ///////////////////////
+function startGame() {
+  activeTable.gameStart();
+  document.querySelector('#center').innerHTML = '';
+  renderPlayer(activeTable.dealer);
+  renderPlayer(activeTable.player);
+  renderButtons();
+}
+
+//////////////////// Activate Hit //////////////////////
+function handleHit() {
+  activeTable.playerHit();
+  renderPlayer(activeTable.player);
+  if (!checkBust(activeTable.player.value)) {
+    renderButtons();
+  } else {
+    handleBust();
+  }
+}
+
+//////////////////// Handle Bust //////////////////////
+function handleBust() {
+  var center = document.querySelector('#center');
+  center.innerHTML = '';
+  center.append(renderBust());
+  center.append(renderRematch());
+}
+
+////////////////// Check For Bust ///////////////////
+function checkBust(input) {
+  if (input > 21) {
+    return true;
+  } else {
+    false;
+  }
+}
