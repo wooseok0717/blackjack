@@ -1,7 +1,7 @@
 .table {
   background: url('../images/blackjack_background.jpeg') no-repeat center;
-  background-size: contain;
-  height: 900px;
+  background-size: cover;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
