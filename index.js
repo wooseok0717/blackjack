@@ -246,6 +246,10 @@ function brandNewGame() {
 
 ///////////////////// Start Game ///////////////////////
 function startGame() {
+  console.log(activeTable.deck.deck.length);
+  if (activeTable.deck.deck.length < 30) {
+    activeTable = new Table();
+  };
   activeTable.gameStart();
   document.querySelector('#center').innerHTML = '';
   renderPlayer(activeTable.dealer);
